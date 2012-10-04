@@ -14,4 +14,9 @@
     return [self.dictionary objectForKey:@"screen_name"];
 }
 
+- (void) logAllUserParams {
+    NSLog(@"========= ALL USER PARAMS ==========");
+    NSLog(@"%@",self.dictionary);
+}
+
 @end

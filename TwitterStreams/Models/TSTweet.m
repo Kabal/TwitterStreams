@@ -32,6 +32,26 @@
     [super dealloc];
 }
 
+- (void) logAllUserParams {
+    NSLog(@"========= ALL TWEET PARAMS ==========");
+    NSLog(@"%@",self.dictionary);
+}
+
+- (NSNumber *)originalTweetID
+{
+    if ([self.dictionary objectForKey:@"retweeted_status"]){
+        return [[self.dictionary objectForKey:@"retweeted_status"] objectForKey:@"id"];
+    }
+    else {
+        return [self.dictionary objectForKey:@"id"];
+    }
+}
+
+- (NSNumber *)retweetCount
+{
+    return [self.dictionary objectForKey:@"retweet_count"];
+}
+
 - (NSString*)text {
     return [self.dictionary objectForKey:@"text"];
 }

@@ -11,5 +11,6 @@
 @interface TSUser : TSModel
 
 - (NSString*)screenName;
+- (void) logAllUserParams;
 
 @end

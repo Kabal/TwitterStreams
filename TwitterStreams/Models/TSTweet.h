@@ -19,5 +19,11 @@
 - (NSArray*)userMentions;
 - (NSArray*)urls;
 - (NSArray*)hashtags;
+- (NSNumber *)retweetCount;
+- (NSNumber *)originalTweetID;
+
+- (void) logAllUserParams;
+
+
 
 @end
