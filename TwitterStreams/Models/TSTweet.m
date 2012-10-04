@@ -14,6 +14,7 @@
 @property (nonatomic, retain) NSArray* cachedUserMentions;
 @property (nonatomic, retain) NSArray* cachedUrls;
 @property (nonatomic, retain) NSArray* cachedHashtags;
+@property (nonatomic, retain) NSDate* cachedCreatedAt;
 @end
 
 @implementation TSTweet
@@ -22,6 +23,7 @@
 @synthesize cachedUserMentions=_cachedUserMentions;
 @synthesize cachedUrls=_cachedUrls;
 @synthesize cachedHashtags=_cachedHashtags;
+@synthesize cachedCreatedAt=_cachedCreatedAt;
 
 - (void)dealloc {
     self.cachedUser = nil;
@@ -91,6 +93,48 @@
     }
     
     return self.cachedHashtags;
+}
+
+- (NSDate*)createdAt{
+    if(!self.cachedCreatedAt){
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
+        [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+        [dateFormatter setDateFormat:@"EEE MMM dd HH:mm:ss '+0000' yyyy"];
+        self.cachedCreatedAt = [dateFormatter dateFromString:[self.dictionary valueForKey:@"created_at"]];
+    }
+    
+    return self.cachedCreatedAt;
+}
+
+- (BOOL) isRetweet
+{
+    NSRegularExpression *retweetRegExp = [[NSRegularExpression alloc] initWithPattern:@"RT @([^\\s:]+):? (.*$)" options:0 error:nil];
+    if ([retweetRegExp numberOfMatchesInString:[self text] options:0 range:NSMakeRange(0, [[self text]length])]){
+        return YES;
+    }
+    else {
+        return NO;
+    }
+    
+}
+
+- (NSString *) extractTextFromRetweet
+{
+    return [self extractPartFromTweetWithIndex:2];
+}
+
+- (NSString *) extractUserFromRetweet
+{
+    return [self extractPartFromTweetWithIndex:1];
+}
+
+- (NSString*) extractPartFromTweetWithIndex:(int)index {
+    NSRegularExpression *retweetRegExp = [[NSRegularExpression alloc] initWithPattern:@"RT @([^\\s:]+):? (.*$)" options:0 error:nil];
+    NSArray *matches = [retweetRegExp matchesInString:[self text] options:0 range:NSMakeRange(0, [[self text] length])];
+    NSTextCheckingResult *match = [matches objectAtIndex:0];
+    NSString *originalText = [[self text] substringWithRange:[match rangeAtIndex:index]];
+    return originalText;
 }
 
 @end

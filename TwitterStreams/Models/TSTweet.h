@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Stuart Hall. All rights reserved.
 //
 
+#import "TSStream.h"
 #import "TSModel.h"
 #import "TSUser.h"
 #import "TSUrl.h"
@@ -21,9 +22,13 @@
 - (NSArray*)hashtags;
 - (NSNumber *)retweetCount;
 - (NSNumber *)originalTweetID;
+- (NSDate *)createdAt;
 
 - (void) logAllUserParams;
 
-
+- (BOOL) isRetweet;
+- (NSString*) extractTextFromRetweet;
+- (NSString*) extractUserFromRetweet;
+- (NSString*) extractPartFromTweetWithIndex:(int)index;
 
 @end
