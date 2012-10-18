@@ -88,6 +88,7 @@
 
 - (void)stop {
     [self.connection cancel];
+    [self.keepAliveTimer invalidate];
     self.connection = nil;
 }
 
