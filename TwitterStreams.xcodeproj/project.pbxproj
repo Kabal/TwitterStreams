@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24C8C40E16C1909C00E54E9E /* TSLocationStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C8C40D16C1909C00E54E9E /* TSLocationStream.m */; };
+		24C8C41016C190BD00E54E9E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24C8C40F16C190BD00E54E9E /* CoreLocation.framework */; };
+		24C8C41216C1941F00E54E9E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24C8C41116C1941F00E54E9E /* MapKit.framework */; };
 		E06A081215063DD800981F07 /* TSFriendsList.m in Sources */ = {isa = PBXBuildFile; fileRef = E06A080D15063DD800981F07 /* TSFriendsList.m */; };
 		E06A081315063DD800981F07 /* TSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E06A080F15063DD800981F07 /* TSModel.m */; };
 		E06A081415063DD800981F07 /* TSModelParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E06A081115063DD800981F07 /* TSModelParser.m */; };
@@ -36,6 +39,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		24C8C40C16C1909C00E54E9E /* TSLocationStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSLocationStream.h; sourceTree = "<group>"; };
+		24C8C40D16C1909C00E54E9E /* TSLocationStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSLocationStream.m; sourceTree = "<group>"; };
+		24C8C40F16C190BD00E54E9E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		24C8C41116C1941F00E54E9E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E06A080C15063DD800981F07 /* TSFriendsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSFriendsList.h; sourceTree = "<group>"; };
 		E06A080D15063DD800981F07 /* TSFriendsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSFriendsList.m; sourceTree = "<group>"; };
 		E06A080E15063DD800981F07 /* TSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSModel.h; sourceTree = "<group>"; };
@@ -88,6 +95,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24C8C41216C1941F00E54E9E /* MapKit.framework in Frameworks */,
+				24C8C41016C190BD00E54E9E /* CoreLocation.framework in Frameworks */,
 				E07C436E1505BC7C006279FA /* Accounts.framework in Frameworks */,
 				E07C436C1505BC77006279FA /* Twitter.framework in Frameworks */,
 				E07C43371505BB3F006279FA /* UIKit.framework in Frameworks */,
@@ -156,6 +165,8 @@
 		E07C43351505BB3F006279FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				24C8C41116C1941F00E54E9E /* MapKit.framework */,
+				24C8C40F16C190BD00E54E9E /* CoreLocation.framework */,
 				E07C436D1505BC7C006279FA /* Accounts.framework */,
 				E07C436B1505BC77006279FA /* Twitter.framework */,
 				E07C43361505BB3F006279FA /* UIKit.framework */,
@@ -201,6 +212,8 @@
 				E07C43791505BFA9006279FA /* TSUserStream.m */,
 				E07C437F1505DA4F006279FA /* TSFilterStream.h */,
 				E07C43801505DA4F006279FA /* TSFilterStream.m */,
+				24C8C40C16C1909C00E54E9E /* TSLocationStream.h */,
+				24C8C40D16C1909C00E54E9E /* TSLocationStream.m */,
 			);
 			path = Streams;
 			sourceTree = "<group>";
@@ -304,6 +317,7 @@
 				E06A08231506FD3100981F07 /* TSUrl.m in Sources */,
 				E06A08261506FE7200981F07 /* TSHashtag.m in Sources */,
 				E06A082A150700F600981F07 /* NSArray+Enumerable.m in Sources */,
+				24C8C40E16C1909C00E54E9E /* TSLocationStream.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

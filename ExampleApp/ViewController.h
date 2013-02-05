@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <CoreLocation/CoreLocation.h>
 #import "TSUserStream.h"
 
-@interface ViewController : UIViewController<UIActionSheetDelegate, TSStreamDelegate>
+@interface ViewController : UIViewController<UIActionSheetDelegate, TSStreamDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, assign) IBOutlet UITableView* tableView;
 

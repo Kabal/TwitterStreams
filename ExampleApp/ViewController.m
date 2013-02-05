@@ -10,6 +10,7 @@
 
 #import "TSUserStream.h"
 #import "TSFilterStream.h"
+#import "TSLocationStream.h"
 
 #import "TSModelParser.h"
 
@@ -19,6 +20,8 @@
 #import "NSArray+Enumerable.h"
 
 @interface ViewController ()
+
+@property (nonatomic, retain) CLLocationManager *locationManager;
 
 @property (nonatomic, retain) ACAccountStore* accountStore;
 @property (nonatomic, retain) NSArray* accounts;
@@ -33,6 +36,7 @@
 
 @synthesize tableView=_tableView;
 
+@synthesize locationManager=_locationManager;
 @synthesize tweets=_tweets;
 @synthesize accountStore=_accountStore;
 @synthesize accounts=_accounts;
@@ -40,6 +44,7 @@
 @synthesize stream=_stream;
 
 - (void)dealloc {
+    self.locationManager = nil;
     self.accountStore = nil;
     self.accounts = nil;
     self.account = nil;
@@ -116,6 +121,31 @@
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+#pragma mark - Location Manager Delegate
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *) oldLocation {
+    
+    // test the age of the location measurement to determine if the measurement is cached
+    // in most cases you will not want to rely on cached measurements
+    NSTimeInterval locationAge = -[newLocation.timestamp timeIntervalSinceNow];
+    if (locationAge > 5.0) return;
+    // test that the horizontal accuracy does not indicate an invalid measurement
+    if (newLocation.horizontalAccuracy < 0) return;
+
+    
+    [self.stream stop];
+    self.stream = [[[TSLocationStream alloc] initWithAccount:self.account
+                                                 andDelegate:self
+                                                 andLocation:newLocation
+                                                withDistance:160934 / 4] autorelease]; //25 miles
+    [self.stream start];
+    
+    if (newLocation.horizontalAccuracy <= self.locationManager.desiredAccuracy) {
+        [self.locationManager stopUpdatingLocation];
+        self.locationManager.delegate = nil;
+    }
+}
+
 #pragma mark - UIActionSheetDelegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -129,7 +159,7 @@
                                                                     delegate:self 
                                                            cancelButtonTitle:nil
                                                       destructiveButtonTitle:nil
-                                                           otherButtonTitles:@"User stream", @"Filter stream", nil] autorelease];
+                                                           otherButtonTitles:@"User stream", @"Filter stream", @"Location stream", nil] autorelease];
                 sheet.tag = 1;
                 [sheet showInView:self.view];
             }
@@ -154,6 +184,12 @@
                                                                      andDelegate:self
                                                                      andKeywords:[NSArray arrayWithObjects:@"stuartkhall", @"discovr", nil]] autorelease];
 
+                }
+                case 2: {
+                    self.locationManager = [[[CLLocationManager alloc] init] autorelease];
+                    self.locationManager.delegate = self;
+                    self.locationManager.desiredAccuracy = 100;
+                    [self.locationManager startUpdatingLocation];
                 }
                     break;
             }
