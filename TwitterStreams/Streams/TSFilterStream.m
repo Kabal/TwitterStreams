@@ -17,7 +17,7 @@
                                        [keywords componentsJoinedByString:@","], @"track",
                                        nil];
     
-    return [super initWithEndpoint:@"https://stream.twitter.com/1/statuses/filter.json"
+    return [super initWithEndpoint:@"https://userstream.twitter.com/1.1/user.json"
                      andParameters:parameters
                         andAccount:account
                        andDelegate:delegate];

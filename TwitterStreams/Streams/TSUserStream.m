@@ -20,7 +20,7 @@
     if (allReplies)
         [parameters setObject:@"all" forKey:@"replies"];
     
-    return [super initWithEndpoint:@"https://userstream.twitter.com/2/user.json"
+    return [super initWithEndpoint:@"https://userstream.twitter.com/1.1/user.json"
                      andParameters:parameters
                         andAccount:account
                        andDelegate:delegate];
