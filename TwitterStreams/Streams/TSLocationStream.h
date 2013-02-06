@@ -8,6 +8,7 @@
 
 #import "TSStream.h"
 #import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
 
 @interface TSLocationStream : TSStream
 /*!
@@ -32,7 +33,19 @@
  */
 - (id)initWithAccount:(ACAccount*)account
           andDelegate:(id<TSStreamDelegate>)delegate
+    andSSWLongitude:(double)swLongitude
+     andSWLatitude:(double)swLatitude
+    andNELongitude:(double)neLongitude
+     andNELatitude:(double)neLatitude;
+
+
+- (id)initWithAccount:(ACAccount*)account
+          andDelegate:(id<TSStreamDelegate>)delegate
           andLocation:(CLLocation *)location
          withDistance:(CLLocationDistance)distance;
+
+- (id)initWithAccount:(ACAccount*)account
+          andDelegate:(id<TSStreamDelegate>)delegate
+          andRegion:(MKCoordinateRegion)region;
 
 @end
