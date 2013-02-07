@@ -9,12 +9,17 @@
 #import "TSTweet.h"
 #import "NSArray+Enumerable.h"
 
+@implementation TSLocationCoordinate2D
+
+@end
+
 @interface TSTweet()
 @property (nonatomic, retain) TSUser* cachedUser;
 @property (nonatomic, retain) NSArray* cachedUserMentions;
 @property (nonatomic, retain) NSArray* cachedUrls;
 @property (nonatomic, retain) NSArray* cachedHashtags;
 @property (nonatomic, retain) NSDate* cachedCreatedAt;
+@property (nonatomic, retain) TSLocationCoordinate2D *cachedLocation;
 @end
 
 @implementation TSTweet
@@ -24,12 +29,14 @@
 @synthesize cachedUrls=_cachedUrls;
 @synthesize cachedHashtags=_cachedHashtags;
 @synthesize cachedCreatedAt=_cachedCreatedAt;
+@synthesize cachedLocation=_cachedLocation;
 
 - (void)dealloc {
     self.cachedUser = nil;
     self.cachedUserMentions = nil;
     self.cachedUrls = nil;
     self.cachedHashtags = nil;
+    self.cachedLocation = nil;
     
     [super dealloc];
 }
@@ -105,6 +112,33 @@
     }
     
     return self.cachedCreatedAt;
+}
+
+- (TSLocationCoordinate2D *)location {
+    if (!self.cachedLocation) {
+        if ([self.dictionary objectForKey:@"coordinates"]) {
+            NSArray *cord = [[self.dictionary objectForKey:@"coordinates"] objectForKey:@"coordinates"];
+            self.cachedLocation = [[[TSLocationCoordinate2D alloc] init] autorelease];
+            self.cachedLocation.latitude = [cord[1] doubleValue];
+            self.cachedLocation.longitude = [cord[0] doubleValue];
+        } else if ([self.dictionary objectForKey:@"place"]) {
+            CGFloat longitude = 0.0f;
+            CGFloat latitude = 0.0f;
+            NSUInteger i = 0;
+            for (NSArray *coords in [[[[self.dictionary objectForKey:@"place"] objectForKey:@"bounding_box"] objectForKey:@"coordinates"] objectAtIndex:0]) {
+                longitude += [coords[0] floatValue];
+                latitude += [coords[1] floatValue];
+                i++;
+            }
+            longitude /= (float)i;
+            latitude /= (float)i;
+            self.cachedLocation = [[[TSLocationCoordinate2D alloc] init] autorelease];
+            self.cachedLocation.latitude = latitude;
+            self.cachedLocation.longitude = longitude;
+        }
+    }
+    
+    return self.cachedLocation;
 }
 
 - (BOOL) isRetweet

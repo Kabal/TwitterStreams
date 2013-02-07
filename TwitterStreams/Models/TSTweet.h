@@ -12,6 +12,13 @@
 #import "TSUrl.h"
 #import "TSHashtag.h"
 
+@interface TSLocationCoordinate2D : NSObject
+
+@property (nonatomic, assign) double latitude;
+@property (nonatomic, assign) double longitude;
+
+@end
+
 @interface TSTweet : TSModel
 
 - (NSString*)text;
@@ -23,6 +30,7 @@
 - (NSNumber *)retweetCount;
 - (NSNumber *)originalTweetID;
 - (NSDate *)createdAt;
+- (TSLocationCoordinate2D *)location;
 
 - (void) logAllUserParams;
 
