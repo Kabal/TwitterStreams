@@ -116,12 +116,12 @@
 
 - (TSLocationCoordinate2D *)location {
     if (!self.cachedLocation) {
-        if ([self.dictionary objectForKey:@"coordinates"]) {
+        if ([self.dictionary objectForKey:@"coordinates"] != [NSNull null]) {
             NSArray *cord = [[self.dictionary objectForKey:@"coordinates"] objectForKey:@"coordinates"];
             self.cachedLocation = [[[TSLocationCoordinate2D alloc] init] autorelease];
             self.cachedLocation.latitude = [cord[1] doubleValue];
             self.cachedLocation.longitude = [cord[0] doubleValue];
-        } else if ([self.dictionary objectForKey:@"place"]) {
+        } else if ([self.dictionary objectForKey:@"place"] != [NSNull null]) {
             CGFloat longitude = 0.0f;
             CGFloat latitude = 0.0f;
             NSUInteger i = 0;
