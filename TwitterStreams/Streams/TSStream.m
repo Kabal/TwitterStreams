@@ -7,7 +7,11 @@
 
 #import "TSStream.h"
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_5_1
+#import <Social/Social.h>
+#else
 #import <Twitter/Twitter.h>
+#endif
 #import <Accounts/Accounts.h>
 
 @interface TSStream ()
@@ -60,17 +64,29 @@
 
 - (void)start {
     // Our actually request
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_5_1
+    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
+                                             requestMethod:SLRequestMethodPOST
+                                                       URL:[NSURL URLWithString:self.endpoint]
+                                               parameters:self.parameters];
+#else
     TWRequest *request = [[TWRequest alloc]
                           initWithURL:[NSURL URLWithString:self.endpoint]
                           parameters:self.parameters
                           requestMethod:TWRequestMethodPOST];
+#endif
     
     // Set the current account for authentication, or even just rate limit
     [request setAccount:self.account];
     
     // Use the signed request to start a connection
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_5_1
+    self.connection = [NSURLConnection connectionWithRequest:request.preparedURLRequest
+                                                    delegate:self];
+#else
     self.connection = [NSURLConnection connectionWithRequest:request.signedURLRequest
                                                     delegate:self];
+#endif
     
     // Start the keepalive timer and connection
     [self resetKeepalive];

@@ -15,7 +15,11 @@
 #import "TSModelParser.h"
 
 #import <Accounts/Accounts.h>
+#if __IPHONE_OS_VERSION_MIN_REQUIRED > __IPHONE_5_1
+#import <Social/Social.h>
+#else
 #import <Twitter/Twitter.h>
+#endif
 
 #import "NSArray+Enumerable.h"
 
