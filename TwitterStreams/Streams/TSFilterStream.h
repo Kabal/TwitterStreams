@@ -30,4 +30,8 @@
           andDelegate:(id<TSStreamDelegate>)delegate
           andKeywords:(NSArray*)keywords;
 
+-  (id)initWithAccount:(ACAccount*)account
+           andDelegate:(id<TSStreamDelegate>)delegate
+         andParameters:(NSDictionary *)parameters;
+    
 @end

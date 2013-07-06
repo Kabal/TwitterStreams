@@ -23,4 +23,14 @@
                        andDelegate:delegate];
 }
 
+- (id)initWithAccount:(ACAccount*)account
+          andDelegate:(id<TSStreamDelegate>)delegate
+        andParameters:(NSDictionary *)parameters {
+    
+    return [super initWithEndpoint:@"https://stream.twitter.com/1/statuses/filter.json"
+                     andParameters:parameters
+                        andAccount:account
+                       andDelegate:delegate];
+}
+
 @end
