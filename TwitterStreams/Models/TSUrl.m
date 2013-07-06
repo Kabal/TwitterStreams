@@ -11,19 +11,19 @@
 @implementation TSUrl
 
 - (NSString*)url {
-    return [self.dictionary objectForKey:@"url"];
+    return (self.dictionary)[@"url"];
 }
 
 - (NSString*)displayUrl {
-    return [self.dictionary objectForKey:@"display_url"];
+    return (self.dictionary)[@"display_url"];
 }
 
 - (NSString*)expandedUrl {
-    return [self.dictionary objectForKey:@"expanded_url"];
+    return (self.dictionary)[@"expanded_url"];
 }
 
 - (NSArray*)indicies {  
-    return [self.dictionary objectForKey:@"indicies"];
+    return (self.dictionary)[@"indicies"];
 }
 
 @end

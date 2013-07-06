@@ -12,6 +12,6 @@
 
 @interface ViewController : UIViewController<UIActionSheetDelegate, TSStreamDelegate, CLLocationManagerDelegate>
 
-@property (nonatomic, assign) IBOutlet UITableView* tableView;
+@property (nonatomic, weak) IBOutlet UITableView* tableView;
 
 @end

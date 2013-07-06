@@ -14,12 +14,12 @@
 @end
 
 @interface TSTweet()
-@property (nonatomic, retain) TSUser* cachedUser;
-@property (nonatomic, retain) NSArray* cachedUserMentions;
-@property (nonatomic, retain) NSArray* cachedUrls;
-@property (nonatomic, retain) NSArray* cachedHashtags;
-@property (nonatomic, retain) NSDate* cachedCreatedAt;
-@property (nonatomic, retain) TSLocationCoordinate2D *cachedLocation;
+@property (nonatomic, strong) TSUser* cachedUser;
+@property (nonatomic, strong) NSArray* cachedUserMentions;
+@property (nonatomic, strong) NSArray* cachedUrls;
+@property (nonatomic, strong) NSArray* cachedHashtags;
+@property (nonatomic, strong) NSDate* cachedCreatedAt;
+@property (nonatomic, strong) TSLocationCoordinate2D *cachedLocation;
 @end
 
 @implementation TSTweet
@@ -31,15 +31,6 @@
 @synthesize cachedCreatedAt=_cachedCreatedAt;
 @synthesize cachedLocation=_cachedLocation;
 
-- (void)dealloc {
-    self.cachedUser = nil;
-    self.cachedUserMentions = nil;
-    self.cachedUrls = nil;
-    self.cachedHashtags = nil;
-    self.cachedLocation = nil;
-    
-    [super dealloc];
-}
 
 - (void) logAllUserParams {
     NSLog(@"========= ALL TWEET PARAMS ==========");
@@ -48,26 +39,26 @@
 
 - (NSNumber *)originalTweetID
 {
-    if ([self.dictionary objectForKey:@"retweeted_status"]){
-        return [[self.dictionary objectForKey:@"retweeted_status"] objectForKey:@"id"];
+    if ((self.dictionary)[@"retweeted_status"]){
+        return (self.dictionary)[@"retweeted_status"][@"id"];
     }
     else {
-        return [self.dictionary objectForKey:@"id"];
+        return (self.dictionary)[@"id"];
     }
 }
 
 - (NSNumber *)retweetCount
 {
-    return [self.dictionary objectForKey:@"retweet_count"];
+    return (self.dictionary)[@"retweet_count"];
 }
 
 - (NSString*)text {
-    return [self.dictionary objectForKey:@"text"];
+    return (self.dictionary)[@"text"];
 }
 
 - (TSUser*)user {
     if (!self.cachedUser)
-        self.cachedUser = [[[TSUser alloc] initWithDictionary:[self.dictionary objectForKey:@"user"]] autorelease];
+        self.cachedUser = [[TSUser alloc] initWithDictionary:(self.dictionary)[@"user"]];
     
     return self.cachedUser;
 }
@@ -75,7 +66,7 @@
 - (NSArray*)userMentions {
     if (!self.cachedUserMentions) {
         self.cachedUserMentions = [[self.dictionary valueForKeyPath:@"entities.user_mentions"] map:^id(NSDictionary* d) {
-            return [[[TSUser alloc] initWithDictionary:d] autorelease];
+            return [[TSUser alloc] initWithDictionary:d];
         }];
     }
     
@@ -85,7 +76,7 @@
 - (NSArray*)urls {
     if (!self.cachedUrls) {
         self.cachedUrls = [[self.dictionary valueForKeyPath:@"entities.urls"] map:^id(NSDictionary* d) {
-            return [[[TSUrl alloc] initWithDictionary:d] autorelease];
+            return [[TSUrl alloc] initWithDictionary:d];
         }];
     }
     
@@ -95,7 +86,7 @@
 - (NSArray*)hashtags {
     if (!self.cachedHashtags) {
         self.cachedHashtags = [[self.dictionary valueForKeyPath:@"entities.hashtags"] map:^id(NSDictionary* d) {
-            return [[[TSHashtag alloc] initWithDictionary:d] autorelease];
+            return [[TSHashtag alloc] initWithDictionary:d];
         }];
     }
     
@@ -116,23 +107,23 @@
 
 - (TSLocationCoordinate2D *)location {
     if (!self.cachedLocation) {
-        if ([self.dictionary objectForKey:@"coordinates"] != [NSNull null]) {
-            NSArray *cord = [[self.dictionary objectForKey:@"coordinates"] objectForKey:@"coordinates"];
-            self.cachedLocation = [[[TSLocationCoordinate2D alloc] init] autorelease];
+        if ((self.dictionary)[@"coordinates"] != [NSNull null]) {
+            NSArray *cord = (self.dictionary)[@"coordinates"][@"coordinates"];
+            self.cachedLocation = [[TSLocationCoordinate2D alloc] init];
             self.cachedLocation.latitude = [cord[1] doubleValue];
             self.cachedLocation.longitude = [cord[0] doubleValue];
-        } else if ([self.dictionary objectForKey:@"place"] != [NSNull null]) {
+        } else if ((self.dictionary)[@"place"] != [NSNull null]) {
             CGFloat longitude = 0.0f;
             CGFloat latitude = 0.0f;
             NSUInteger i = 0;
-            for (NSArray *coords in [[[[self.dictionary objectForKey:@"place"] objectForKey:@"bounding_box"] objectForKey:@"coordinates"] objectAtIndex:0]) {
+            for (NSArray *coords in (self.dictionary)[@"place"][@"bounding_box"][@"coordinates"][0]) {
                 longitude += [coords[0] floatValue];
                 latitude += [coords[1] floatValue];
                 i++;
             }
             longitude /= (float)i;
             latitude /= (float)i;
-            self.cachedLocation = [[[TSLocationCoordinate2D alloc] init] autorelease];
+            self.cachedLocation = [[TSLocationCoordinate2D alloc] init];
             self.cachedLocation.latitude = latitude;
             self.cachedLocation.longitude = longitude;
         }
@@ -166,7 +157,7 @@
 - (NSString*) extractPartFromTweetWithIndex:(int)index {
     NSRegularExpression *retweetRegExp = [[NSRegularExpression alloc] initWithPattern:@"RT @([^\\s:]+):? (.*$)" options:0 error:nil];
     NSArray *matches = [retweetRegExp matchesInString:[self text] options:0 range:NSMakeRange(0, [[self text] length])];
-    NSTextCheckingResult *match = [matches objectAtIndex:0];
+    NSTextCheckingResult *match = matches[0];
     NSString *originalText = [[self text] substringWithRange:[match rangeAtIndex:index]];
     return originalText;
 }

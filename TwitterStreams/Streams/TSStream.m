@@ -6,19 +6,18 @@
 //
 
 #import "TSStream.h"
-#import "JSONKit.h"
 
 #import <Twitter/Twitter.h>
 #import <Accounts/Accounts.h>
 
 @interface TSStream ()
 
-@property (nonatomic, retain) NSURLConnection* connection;
-@property (nonatomic, retain) NSTimer* keepAliveTimer;
-@property (nonatomic, assign) id<TSStreamDelegate> delegate;
-@property (nonatomic, retain) ACAccount* account;
-@property (nonatomic, retain) NSMutableDictionary* parameters;
-@property (nonatomic, retain) NSString* endpoint;
+@property (nonatomic, strong) NSURLConnection* connection;
+@property (nonatomic, strong) NSTimer* keepAliveTimer;
+@property (nonatomic, weak) id<TSStreamDelegate> delegate;
+@property (nonatomic, strong) ACAccount* account;
+@property (nonatomic, strong) NSMutableDictionary* parameters;
+@property (nonatomic, strong) NSString* endpoint;
 
 @end
 
@@ -33,16 +32,10 @@
 
 - (void)dealloc {
     [self.connection cancel];
-    self.connection = nil;
     
     [self.keepAliveTimer invalidate];
-    self.keepAliveTimer = nil;
     
-    self.account = nil;
-    self.parameters = nil;
-    self.endpoint = nil;
     
-    [super dealloc];
 }
 
 - (id)initWithEndpoint:(NSString*)endpoint
@@ -58,7 +51,7 @@
         
         // Use length delimited so we can count the bytes
         self.parameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
-        [self.parameters setObject:@"length" forKey:@"delimited"];
+        (self.parameters)[@"delimited"] = @"length";
     }
     return self;
 }
@@ -83,7 +76,6 @@
     [self resetKeepalive];
     [self.connection start];
     
-    [request release];
 }
 
 - (void)stop {
@@ -120,7 +112,7 @@
     int bytesExpected = 0;
     NSMutableString* message = nil;
     
-    NSString* response = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    NSString* response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     for (NSString* part in [response componentsSeparatedByString:@"\r\n"]) {
         int length = [part intValue];
         if (length > 0) {
@@ -140,10 +132,11 @@
                 
                 if (message.length == bytesExpected) {
                     // Success!
-                    id json = [message objectFromJSONString];
+                    NSError *error = nil;
+                    id json = [NSJSONSerialization JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
                     
                     // Alert the delegate
-                    if (json) { 
+                    if (!error && json) {
                         if (self.delegate && [self.delegate respondsToSelector:@selector(streamDidReceiveMessage:json:)])
                             [self.delegate streamDidReceiveMessage:self json:json];
                         [self resetKeepalive];

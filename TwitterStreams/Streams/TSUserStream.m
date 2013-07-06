@@ -18,7 +18,7 @@
                                        allFollowing ? @"followings" : @"user", @"with",
                                        nil];
     if (allReplies)
-        [parameters setObject:@"all" forKey:@"replies"];
+        parameters[@"replies"] = @"all";
     
     return [super initWithEndpoint:@"https://userstream.twitter.com/1.1/user.json"
                      andParameters:parameters

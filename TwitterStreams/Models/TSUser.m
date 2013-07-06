@@ -11,7 +11,7 @@
 @implementation TSUser
 
 - (NSString*)screenName {
-    return [self.dictionary objectForKey:@"screen_name"];
+    return (self.dictionary)[@"screen_name"];
 }
 
 - (void) logAllUserParams {

@@ -27,38 +27,38 @@ static dispatch_queue_t operation_processing_queue() {
       unsupported:(TSModelParserUnsupported)unsupported {
     dispatch_async(operation_processing_queue(), ^(void) {
         if ([json isKindOfClass:[NSDictionary class]]) {
-            if ([json objectForKey:@"friends"]) {
-                TSFriendsList* model = [[[TSFriendsList alloc] initWithDictionary:json] autorelease];
+            if (json[@"friends"]) {
+                TSFriendsList* model = [[TSFriendsList alloc] initWithDictionary:json];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     friends(model);
                 });
             }
-            else if ([json objectForKey:@"source"] && [json objectForKey:@"text"]) {
-                TSTweet* model = [[[TSTweet alloc] initWithDictionary:json] autorelease];
+            else if (json[@"source"] && json[@"text"]) {
+                TSTweet* model = [[TSTweet alloc] initWithDictionary:json];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     tweet(model);
                 });
             }    
-            else if ([json objectForKey:@"delete"]) {
-                TSTweet* model = [[[TSTweet alloc] initWithDictionary:[json objectForKey:@"status"]] autorelease];
+            else if (json[@"delete"]) {
+                TSTweet* model = [[TSTweet alloc] initWithDictionary:json[@"status"]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     deleteTweet(model);
                 });
             }  
-            else if ([json objectForKey:@"event"] && [[json objectForKey:@"event"] isEqualToString:@"follow"]) {
-                TSFollow* model = [[[TSFollow alloc] initWithDictionary:json] autorelease];
+            else if (json[@"event"] && [json[@"event"] isEqualToString:@"follow"]) {
+                TSFollow* model = [[TSFollow alloc] initWithDictionary:json];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     follow(model);
                 });
             }  
-            else if ([json objectForKey:@"event"] && [[json objectForKey:@"event"] isEqualToString:@"favorite"]) {
-                TSFavorite* model = [[[TSFavorite alloc] initWithDictionary:json] autorelease];
+            else if (json[@"event"] && [json[@"event"] isEqualToString:@"favorite"]) {
+                TSFavorite* model = [[TSFavorite alloc] initWithDictionary:json];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     favorite(model);
                 });
             }
-            else if ([json objectForKey:@"event"] && [[json objectForKey:@"event"] isEqualToString:@"unfavorite"]) {
-                TSFavorite* model = [[[TSFavorite alloc] initWithDictionary:json] autorelease];
+            else if (json[@"event"] && [json[@"event"] isEqualToString:@"unfavorite"]) {
+                TSFavorite* model = [[TSFavorite alloc] initWithDictionary:json];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     unfavorite(model);
                 });

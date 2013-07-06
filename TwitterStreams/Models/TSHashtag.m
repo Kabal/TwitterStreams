@@ -11,11 +11,11 @@
 @implementation TSHashtag
 
 - (NSString*)text {
-    return [self.dictionary objectForKey:@"text"];
+    return (self.dictionary)[@"text"];
 }
 
 - (NSArray*)indicies {  
-    return [self.dictionary objectForKey:@"indicies"];
+    return (self.dictionary)[@"indicies"];
 }
 
 @end

@@ -11,7 +11,7 @@
 @implementation TSFriendsList
 
 - (NSArray*)friendsIds {
-    return [self.dictionary objectForKey:@"friends"];
+    return (self.dictionary)[@"friends"];
 }
 
 @end
