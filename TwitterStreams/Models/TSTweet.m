@@ -98,6 +98,7 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
         [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
         [dateFormatter setDateFormat:@"EEE MMM dd HH:mm:ss '+0000' yyyy"];
         self.cachedCreatedAt = [dateFormatter dateFromString:[self.dictionary valueForKey:@"created_at"]];
     }
